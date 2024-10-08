@@ -2,12 +2,11 @@ import React from 'react';
 
 const HeroComponent = () => {  
     return (  
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">  
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-16 text-center lg:pt-20">  
             <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-slate-700 sm:mt-6">  
                 Welcome to   
                 <span className="border-b border-dotted border-slate-300"> BaseCrate</span>  
             </p>  
-
             <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-slate-900 sm:text-7xl">  
                 <span className="inline-block">Your   
                     <span className="relative whitespace-nowrap text-blue-600">  

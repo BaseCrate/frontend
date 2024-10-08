@@ -80,9 +80,9 @@ export default function Navbar() {
 
 				{/* <div className={style.headerIcon} onClick={() => { router.push(`/profile/${address}`) }}> */}
 				<div
-					className="flex"
+					className="flex px-4"
 					onClick={() => {
-						router.push("/nft");
+						router.push("/dashboard");
 					}}
 				>
 
@@ -90,9 +90,9 @@ export default function Navbar() {
 					<div className="font-bold text-[#c8cacd] hover:text-white cursor-pointer"> Dashboard</div>
 
 				</div>
-				<div className={style.headerIcon}>
+				{/* <div className={style.headerIcon}>
 					<MdOutlineAccountBalanceWallet />
-				</div>
+				</div> */}
 				<div>
 					<ConnectButton />
 				</div>
