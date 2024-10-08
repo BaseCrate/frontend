@@ -33,7 +33,7 @@ export default function Navbar() {
 					{/* <Image src={mantleSeaLogo} height={80} width={200} alt="mantle logo" /> */}
 					<div className="text-[32px] text-white font-serif"
 					>
-						MyLogo
+						BaseCrate
 					</div>
 					<div className={style.logoText}></div>
 				</div>
@@ -48,7 +48,7 @@ export default function Navbar() {
 					className={style.searchInput}
 					type="text"
 					defaultValue={searchQuery}
-					placeholder="Enter Text"
+					placeholder="Track Your Investment"
 				//  onKeyPress={(e) => {
 				// if (e.key === 'Enter')
 				//     console.log(searchQuery)
@@ -69,23 +69,26 @@ export default function Navbar() {
 					{/* <div className={style.headerItem}> Streaming </div> */}
 				</Link>
 
-				<div
+				{/* <div
 					className={style.headerItem}
 					onClick={() => {
 						router.push("/explore");
 					}}
 				>
 					Explore
-				</div>
+				</div> */}
 
 				{/* <div className={style.headerIcon} onClick={() => { router.push(`/profile/${address}`) }}> */}
 				<div
-					className={style.headerIcon}
+					className="flex"
 					onClick={() => {
 						router.push("/nft");
 					}}
 				>
-					<CgProfile />
+
+					<div className={style.headerIcon}><CgProfile /></div>
+					<div className="font-bold text-[#c8cacd] hover:text-white cursor-pointer"> Dashboard</div>
+
 				</div>
 				<div className={style.headerIcon}>
 					<MdOutlineAccountBalanceWallet />

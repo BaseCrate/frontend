@@ -22,19 +22,20 @@ import {
 import 'dotenv/config'
 
 import {
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
+    sepolia,
+    baseSepolia,
+    base
 } from 'wagmi/chains';
 // import { publicProvider } from 'wagmi/providers/public';
 // import { alchemyProvider } from "wagmi/providers/alchemy";
 
 
 const config = getDefaultConfig({
-    appName: 'My RainbowKit App',
+    appName: 'BaseCrate',
     projectId: 'YOUR_PROJECT_ID',
-    chains: [mainnet, polygon, optimism, arbitrum],
+    chains: [sepolia,
+        baseSepolia,
+        base],
     ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
