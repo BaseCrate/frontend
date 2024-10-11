@@ -1,11 +1,10 @@
-
+"use client";
 import Image from 'next/image';
 import { useState } from 'react';
 // import { Pie } from 'react-chartjs-2';
 import { Chart } from "react-google-charts";
-import 'chart.js/auto';
 import { useAccount } from 'wagmi';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 const profile = () => {
@@ -86,11 +85,11 @@ const profile = () => {
                         </button> */}
                         <div className=' justify-end m-4 flex gap-4'>
 
-                            <button className="bg-custom-color  text-black px-4 py-2 rounded hover:bg-custom-color-500 transition duration-300"
+                            {/* <button className="bg-custom-color  text-black px-4 py-2 rounded hover:bg-custom-color-500 transition duration-300"
                                 onClick={() => router.push('https://global-stg.transak.com/?apiKey=4aae77ea-df1a-4a88-9095-89625873c08e')}
                             >
                                 Buy APT Token
-                            </button>
+                            </button> */}
 
                             <button className="bg-custom-color text-black px-4 py-2 rounded hover:bg-custom-color-500 transition duration-300"
                                 onClick={console.log(address)}
