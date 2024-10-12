@@ -10,9 +10,7 @@ import Link from 'next/link';
 const profile = () => {
     const router = useRouter();
     const { address, isConnected } = useAccount();
-
     // const [walletAddress, setWalletAddress] = useState(account>.address);
-
 
     const [userProfile, setUserProfile] = useState({
         username: '0xshikhar.eth',
@@ -167,7 +165,7 @@ const profile = () => {
                                     <span className="text-lg font-bold text-green-400 ml-2">
                                         ${bet.potentialWin.toFixed(2)}
                                     </span>
-                                    <button className="bg-custom-color mx-2 text-black px-3 py-1 rounded hover:bg-custom-color-500 transition duration-300" href='_' onClick={() => (window.open('https://x.com/0xTribeBet', '_blank'))}>
+                                    <button className="bg-custom-color mx-2 text-black px-3 py-1 rounded hover:bg-custom-color-500 transition duration-300" href='_' onClick={() => (window.open('https://x.com/BaseCrate', '_blank'))}>
                                         Share on X
                                     </button>
                                 </div>
