@@ -86,8 +86,8 @@ export default function Navbar() {
 					}}
 				>
 
-					<div className={style.headerIcon}><CgProfile /></div>
-					<div className="font-bold text-[#c8cacd] hover:text-white cursor-pointer"> Dashboard</div>
+					<div className="text-[#8a939b] text-3xl px-1 font-black hover:text-white cursor-pointer"><CgProfile /></div>
+					<div className="pt-1 font-bold text-[#c8cacd] hover:text-white cursor-pointer items-center "> Dashboard</div>
 
 				</div>
 				{/* <div className={style.headerIcon}>

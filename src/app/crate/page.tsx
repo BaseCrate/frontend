@@ -37,7 +37,7 @@ const Crate = () => {
 
     useEffect(() => {
         const searchParams = new URLSearchParams(window.location.search)
-        setOpen(searchParams.get("state") || "stake");
+        setOpen(searchParams.get("state") || "deposit");
         if (typeof window !== 'undefined' && window.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             setProvider(provider);
