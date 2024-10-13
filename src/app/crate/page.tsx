@@ -7,21 +7,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import CRATE_CONTRACT from '@/lib/abi/Crate.json'
 import { CRATE_CONTRACT_ADDRESS, getCrateContract } from '@/lib/contracts'
-
-export const data = [
-    ["Time", "Crate Performance"],
-    ["Jan", 1000],
-    ["March", 1100],
-    ["June", 660],
-    ["Aug", 1030],
-    ["Oct", 1060],
-];
-
-export const options = {
-    curveType: "function",
-    legend: { position: "bottom" },
-};
-
+import {CrateData1, options} from '@/lib/data'
 
 const Crate = () => {
     const { address, isConnected } = useAccount();
@@ -280,7 +266,7 @@ const Crate = () => {
                         chartType="LineChart"
                         width="100%"
                         height="100%"
-                        data={data}
+                        data={CrateData1}
                         options={options}
                         legendToggle
                     />

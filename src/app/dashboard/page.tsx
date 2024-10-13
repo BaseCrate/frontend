@@ -9,7 +9,7 @@ import { getBalance } from '@wagmi/core'
 import { config } from '@/lib/contracts';
 
 
-const profile = () => {
+const Dashboard = () => {
     const router = useRouter();
     const { address, isConnected } = useAccount();
     const [etherBalance, setEtherBalance] = useState<string | null>(null);
@@ -352,4 +352,4 @@ const profile = () => {
     );
 };
 
-export default profile;
+export default Dashboard;
