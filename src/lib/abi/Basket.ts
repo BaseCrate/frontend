@@ -310,6 +310,47 @@ export const ERC20abi = [
 ]
 export const abi = [
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "basketId",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "token",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "alllowToken",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "basketId",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			}
+		],
+		"name": "allowWeth",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -359,6 +400,11 @@ export const abi = [
 						"internalType": "address",
 						"name": "pool",
 						"type": "address"
+					},
+					{
+						"internalType": "enum Baskets.BasketType",
+						"name": "basketType",
+						"type": "uint8"
 					}
 				],
 				"indexed": false,
@@ -369,6 +415,62 @@ export const abi = [
 		],
 		"name": "BasketCreated",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "tokens",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "weights",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "string",
+				"name": "id",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "poolAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "enum Baskets.BasketType",
+				"name": "basketType",
+				"type": "uint8"
+			}
+		],
+		"name": "createBasket",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "basketId",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "tokenIn",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amountIn",
+				"type": "uint256"
+			}
+		],
+		"name": "depositAndSwap",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -434,17 +536,12 @@ export const abi = [
 				"type": "string"
 			},
 			{
-				"internalType": "address",
-				"name": "token",
-				"type": "address"
-			},
-			{
 				"internalType": "uint256",
-				"name": "amount",
+				"name": "amountIn",
 				"type": "uint256"
 			}
 		],
-		"name": "alllowToken",
+		"name": "transferToContract",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -457,12 +554,17 @@ export const abi = [
 				"type": "string"
 			},
 			{
+				"internalType": "address",
+				"name": "tokenOut",
+				"type": "address"
+			},
+			{
 				"internalType": "uint256",
-				"name": "amountIn",
+				"name": "amountOut",
 				"type": "uint256"
 			}
 		],
-		"name": "allowWeth",
+		"name": "withdraw",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -484,34 +586,6 @@ export const abi = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "tokens",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "weights",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "string",
-				"name": "id",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "poolAddress",
-				"type": "address"
-			}
-		],
-		"name": "createBasket",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -548,32 +622,14 @@ export const abi = [
 				"internalType": "address",
 				"name": "pool",
 				"type": "address"
+			},
+			{
+				"internalType": "enum Baskets.BasketType",
+				"name": "basketType",
+				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "basketId",
-				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "tokenIn",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amountIn",
-				"type": "uint256"
-			}
-		],
-		"name": "depositAndSwap",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -622,6 +678,11 @@ export const abi = [
 						"internalType": "address",
 						"name": "pool",
 						"type": "address"
+					},
+					{
+						"internalType": "enum Baskets.BasketType",
+						"name": "basketType",
+						"type": "uint8"
 					}
 				],
 				"internalType": "struct Baskets.Basket",
@@ -678,9 +739,70 @@ export const abi = [
 						"internalType": "address",
 						"name": "pool",
 						"type": "address"
+					},
+					{
+						"internalType": "enum Baskets.BasketType",
+						"name": "basketType",
+						"type": "uint8"
 					}
 				],
 				"internalType": "struct Baskets.Basket[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getDashboardData",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "string",
+						"name": "basketId",
+						"type": "string"
+					},
+					{
+						"internalType": "enum Baskets.BasketType",
+						"name": "basketType",
+						"type": "uint8"
+					},
+					{
+						"internalType": "uint256",
+						"name": "totalWethInvested",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address[]",
+						"name": "tokens",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "weights",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "uint256",
+						"name": "lastInvestmentTime",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Baskets.DashboardView[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -710,19 +832,20 @@ export const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "basketId",
-				"type": "string"
-			},
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "getTotalWethInvested",
+		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "amountIn",
+				"name": "total",
 				"type": "uint256"
 			}
 		],
-		"name": "transferToContract",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -754,6 +877,11 @@ export const abi = [
 				"internalType": "address",
 				"name": "pool",
 				"type": "address"
+			},
+			{
+				"internalType": "enum Baskets.BasketType",
+				"name": "basketType",
+				"type": "uint8"
 			}
 		],
 		"stateMutability": "view",
@@ -762,24 +890,60 @@ export const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "string",
-				"name": "basketId",
-				"type": "string"
-			},
-			{
 				"internalType": "address",
-				"name": "tokenOut",
+				"name": "",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "amountOut",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "withdraw",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "userInvestedBaskets",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"name": "userInvestments",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "totalWethInvested",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "lastInvestmentTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "hasInvested",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]
+

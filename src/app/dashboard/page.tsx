@@ -1,32 +1,76 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import { Chart } from 'react-google-charts';
-import { useAccount } from 'wagmi';
-import { getBalance } from '@wagmi/core';
-import { config } from '@/lib/contracts';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Chart } from "react-google-charts";
+import { useAccount, useReadContract } from "wagmi";
+import { getBalance } from "@wagmi/core";
+import { config } from "@/lib/contracts";
+import { abi } from "@/lib/abi/Basket";
+import { getCrateName } from "@/lib/utils";
 
 const Dashboard = () => {
   const { address, isConnected } = useAccount();
   const [etherBalance, setEtherBalance] = useState<string | null>(null);
+  const [statisticsData, setStatisticsData] = useState<any | null>(null);
+  const [statisticsPieData, setStatisticsPieData] = useState<any | null>(null);
   const [usdcBalance, setUsdcBalance] = useState<string | null>(null);
+
+  const {
+    data: stats,
+    isLoading,
+    error,
+  } = useReadContract({
+    abi,
+    address: "0xaEa04f2a42d9dE2460979a88810Acef109d6a894",
+    functionName: "getDashboardData",
+    args: [address],
+  });
+
+  useEffect(() => {
+    if (stats && Array.isArray(stats)) {
+      const newStats = stats.map((stat, index) => ({
+        name: getCrateName(stat.basketType) || `Crate ${index + 1}`, // Default name if not present
+        amount: `${Number(stat.totalWethInvested) / 1000000000000000000} ETH`,
+      }));
+      const newPieStats = stats.map((stat, index) => [
+        getCrateName(stat.basketType) || `Crate ${index + 1}`,
+        Number(stat.totalWethInvested) / 1000000000000000000,
+      ]);
+      // Update the state with the formatted stats
+      setStatisticsData(newStats);
+      setStatisticsPieData(newPieStats);
+    }
+  }, [stats]);
+
+  console.log("stats", statisticsData);
 
   useEffect(() => {
     if (isConnected && address) {
-      getBalance(config, { address, unit: 'ether' })
+      getBalance(config, { address, unit: "ether" })
         .then((balance) => {
-          setEtherBalance(balance?.formatted.toString().slice(0, balance.formatted.toString().indexOf('.') + 7));
+          setEtherBalance(
+            balance?.formatted
+              .toString()
+              .slice(0, balance.formatted.toString().indexOf(".") + 7)
+          );
         })
         .catch((error) => {
-          console.error('Error fetching balance:', error);
+          console.error("Error fetching balance:", error);
         });
 
-      getBalance(config, { address, token: '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238' })
+      getBalance(config, {
+        address,
+        token: "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      })
         .then((balance) => {
-          setUsdcBalance(balance?.formatted.toString().slice(0, balance.formatted.toString().indexOf('.') + 6));
+          setUsdcBalance(
+            balance?.formatted
+              .toString()
+              .slice(0, balance.formatted.toString().indexOf(".") + 6)
+          );
         })
         .catch((error) => {
-          console.error('Error fetching balance:', error);
+          console.error("Error fetching balance:", error);
         });
     }
   }, [isConnected, address]);
@@ -39,10 +83,7 @@ const Dashboard = () => {
 
   const data = [
     ["Investments", "Ratio"],
-    ["DeFi", 11],
-    ["Meme", 2],
-    ["GameFi", 2],
-    ["Misc", 2],
+    ...(statisticsPieData || ["DeFi", 0]),
   ];
 
   const options = {
@@ -91,8 +132,13 @@ const Dashboard = () => {
                 className="rounded-full"
               />
               <div className="flex-col text-center sm:text-left">
-                <h1 className="text-2xl sm:text-3xl font-bold">{userProfile.username}</h1>
-                <div className="text-xs sm:text-sm break-all"> {address} </div>
+                {/* <h1 className="text-2xl sm:text-3xl font-bold">{userProfile.username}</h1> */}
+                <h1 className="text-2xl sm:text-3xl font-bold">
+                  {address
+                    ? `${address.slice(0, 6)}......${address.slice(-6)}`
+                    : ""}
+                </h1>
+                {/* <div className="text-xs sm:text-sm break-all"> {address} </div> */}
               </div>
             </div>
             <div className="flex flex-row gap-4">
@@ -109,68 +155,129 @@ const Dashboard = () => {
 
         {/* Statistics Section */}
         <div className="p-4 sm:p-10 rounded-3xl bg-gray-100 mb-6">
-          <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Statistics</h2>
-          <div className="flex flex-col lg:flex-row gap-5">
-            <div className="w-full lg:w-[60%] rounded-3xl">
-              <Chart
-                chartType="PieChart"
-                data={data}
-                options={options}
-                width={"100%"}
-                height={"300px"}
-              />
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4">
+            Statistics
+          </h2>
+          {isLoading ? (
+            <div>Fetching stats, please wait</div>
+          ) : (
+            <div className="flex flex-col lg:flex-row gap-5">
+              {
+                // If there are no stats, show a message
+                !statisticsData?.length ? (
+                  <div>You don&apos;t have any Investments</div>
+                ) : (
+                  <>
+                    <div className="w-full lg:w-[60%] rounded-3xl">
+                      <Chart
+                        chartType="PieChart"
+                        data={data}
+                        options={options}
+                        width={"100%"}
+                        height={"300px"}
+                      />
+                    </div>
+                    <div className="w-full lg:w-[40%] p-4 sm:p-10 rounded-3xl bg-white">
+                      <div className="flex items-center justify-between mb-4">
+                        <h2 className="card-title text-xl sm:text-2xl">
+                          {" "}
+                          Distribution
+                        </h2>
+                      </div>
+                      {statisticsData?.map((item: any, index: any) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between mt-3"
+                        >
+                          <div className="flex items-center">
+                            <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                            <div className="ml-2">{item.name}</div>
+                          </div>
+                          <div>{item.amount}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )
+              }
             </div>
-            <div className="w-full lg:w-[40%] p-4 sm:p-10 rounded-3xl bg-white">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="card-title text-xl sm:text-2xl"> Distribution</h2>
-              </div>
-              {[
-                { name: "DeFi Crates", amount: "11 ETH" },
-                { name: "Meme Crates", amount: "5 ETH" },
-                { name: "GameFi Crates", amount: "3 ETH" },
-                { name: "Misc Crates", amount: "2 ETH" },
-              ].map((item, index) => (
-                <div key={index} className="flex items-center justify-between mt-3">
-                  <div className="flex items-center">
-                    <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-                    <div className="ml-2">{item.name}</div>
-                  </div>
-                  <div>{item.amount}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Transaction History Section */}
         <div className="p-4 md:p-10 bg-gray-100 rounded-3xl">
-          <div className="text-2xl md:text-3xl font-bold mb-4"> Transaction History</div>
+          <div className="text-2xl md:text-3xl font-bold mb-4">
+            {" "}
+            Transaction History
+          </div>
           <div className="card w-full my-5 p-2 md:p-5 items-center shadow-xl overflow-x-auto">
             <table className="w-full text-[10px] md:text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="px-4 py-3 sm:px-6">Hash</th>
-                  <th scope="col" className="px-4 py-3 sm:px-6">No of Crates</th>
-                  <th scope="col" className="px-4 py-3 sm:px-6">Time</th>
-                  <th scope="col" className="px-4 py-3 sm:px-6">Action</th>
-                  <th scope="col" className="px-4 py-3 sm:px-6">Crates</th>
+                  <th scope="col" className="px-4 py-3 sm:px-6">
+                    Hash
+                  </th>
+                  <th scope="col" className="px-4 py-3 sm:px-6">
+                    No of Crates
+                  </th>
+                  <th scope="col" className="px-4 py-3 sm:px-6">
+                    Time
+                  </th>
+                  <th scope="col" className="px-4 py-3 sm:px-6">
+                    Action
+                  </th>
+                  <th scope="col" className="px-4 py-3 sm:px-6">
+                    Crates
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  { hash: "0x9726e6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17", crates: 1, time: "10:23:50 13 Oct", action: "invest", crateName: "Defi Crate 1" },
-                  { hash: "0xj3k3jb235e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17", crates: 1, time: "2:23:50 13 Oct", action: "withdraw", crateName: "Defi Crate 2" },
-                  { hash: "0x34jn726e6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17", crates: 1, time: "1:23:50 12 Oct", action: "invest", crateName: "Meme Crate 1" },
-                  { hash: "0x34kje6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17", crates: 1, time: "3:23:50 11 Oct", action: "invest", crateName: "GameFi Crate 1" },
+                  {
+                    hash: "0x9726e6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17",
+                    crates: 1,
+                    time: "10:23:50 13 Oct",
+                    action: "invest",
+                    crateName: "Defi Crate 1",
+                  },
+                  {
+                    hash: "0xj3k3jb235e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17",
+                    crates: 1,
+                    time: "2:23:50 13 Oct",
+                    action: "withdraw",
+                    crateName: "Defi Crate 2",
+                  },
+                  {
+                    hash: "0x34jn726e6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17",
+                    crates: 1,
+                    time: "1:23:50 12 Oct",
+                    action: "invest",
+                    crateName: "Meme Crate 1",
+                  },
+                  {
+                    hash: "0x34kje6cac75e92941f13bfe705a0b32cf132ff2451ce1a6cc8bf0748a6c61b17",
+                    crates: 1,
+                    time: "3:23:50 11 Oct",
+                    action: "invest",
+                    crateName: "GameFi Crate 1",
+                  },
                 ].map((transaction, index) => (
-                  <tr key={index} className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <tr
+                    key={index}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  >
+                    <th
+                      scope="row"
+                      className="px-4 py-4 sm:px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
                       {transaction.hash.slice(0, 10)}...
                     </th>
                     <td className="px-4 py-4 md:px-6">{transaction.crates}</td>
                     <td className="px-4 py-4 md:px-6">{transaction.time}</td>
                     <td className="px-4 py-4 md:px-6">{transaction.action}</td>
-                    <td className="px-4 py-4 md:px-6">{transaction.crateName}</td>
+                    <td className="px-4 py-4 md:px-6">
+                      {transaction.crateName}
+                    </td>
                   </tr>
                 ))}
               </tbody>
