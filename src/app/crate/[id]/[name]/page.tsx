@@ -48,7 +48,7 @@ const Crate = () => {
     try {
       await writeContract({
         abi,
-        address: '0x9ECfCFb4f4388C3Fb61b689D340EDceb9eaeA6B6',
+        address: '0xaEa04f2a42d9dE2460979a88810Acef109d6a894',
         functionName: 'depositAndSwap',
         args: [
           params.id,
@@ -74,7 +74,7 @@ const Crate = () => {
     try {
       await writeContract({
         abi,
-        address: '0x9ECfCFb4f4388C3Fb61b689D340EDceb9eaeA6B6',
+        address: '0xaEa04f2a42d9dE2460979a88810Acef109d6a894',
         functionName: 'withdraw',
         args: [
           'a',
