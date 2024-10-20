@@ -15,38 +15,43 @@ interface GridComponentProps {
 const categories = ['All','DeFi', 'Meme', 'GameFi'];
 
 const crateData = [
-    {
+    {   
+        id: "a",
         name: 'DeFi Crate 1',
         category: 'DeFi',
-        containsTokens: ['ETH', 'USDC', 'UNI'],
+        containsTokens: ['TON', '1INCH', 'SUSHI'],
         oneMonthReturn: 50.00,
         oneYearReturn: 20.00,
     },
     {
-        name: 'DeFi Crate 1',
+        id: "b",
+        name: 'DeFi Crate 2',
         category: 'DeFi',
-        containsTokens: ['ETH', 'USDC', 'UNI'],
+        containsTokens: ['POL', 'ARB', 'OGC'],
         oneMonthReturn: 50.00,
         oneYearReturn: 20.00,
     },
     {
-        name: 'DeFi Crate 1',
+        id: "c",
+        name: 'DeFi Crate 3',
         category: 'DeFi',
-        containsTokens: ['ETH', 'USDC', 'UNI'],
+        containsTokens: ['UNI', 'BNB', 'TON'],
         oneMonthReturn: 50.00,
         oneYearReturn: 20.00,
     },
     {
+        id: "d",
         name: 'Meme Crate 1',
         category: 'Meme',
-        containsTokens: ['ETH', 'USDC', 'UNI'],
+        containsTokens: ['SONA', 'LOHA', 'SILVER'],
         oneMonthReturn: 50.00,
         oneYearReturn: 20.00,
     },
     {
-        name: 'GameFi Crate 1',
-        category: 'GameFi',
-        containsTokens: ['ETH', 'USDC', 'UNI'],
+        id: "e",
+        name: 'Meme Crate 2',
+        category: 'Meme',
+        containsTokens: ['PEPE', 'MOTO', 'DOGE'],
         oneMonthReturn: 50.00,
         oneYearReturn: 20.00,
     },
