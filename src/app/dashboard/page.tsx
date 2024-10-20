@@ -7,6 +7,26 @@ import { getBalance } from "@wagmi/core";
 import { config } from "@/lib/contracts";
 import { abi } from "@/lib/abi/Basket";
 import { getCrateName } from "@/lib/utils";
+import { ethers } from 'ethers';
+import TransactionTable from '@/components/TransactionTable';
+
+interface Transaction {
+  transactionHash: string;
+  type: string;
+  blockNumber: number;
+  previousOwner?: string;
+  newOwner?: string;
+  member?: string;
+  amount?: {
+      type: string;
+      hex: string;
+  };
+}
+
+interface TransactionTableProps {
+  transactions: Transaction[];
+}
+
 
 const Dashboard = () => {
   const { address, isConnected } = useAccount();
@@ -14,6 +34,10 @@ const Dashboard = () => {
   const [statisticsData, setStatisticsData] = useState<any | null>(null);
   const [statisticsPieData, setStatisticsPieData] = useState<any | null>(null);
   const [usdcBalance, setUsdcBalance] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [transactions, setTransactions] = useState<Transaction[] | undefined>(undefined);
+
+  const contractAddress = "0xaEa04f2a42d9dE2460979a88810Acef109d6a894";
 
   const {
     data: stats,
@@ -41,6 +65,68 @@ const Dashboard = () => {
       setStatisticsPieData(newPieStats);
     }
   }, [stats]);
+
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      if (isConnected && window.ethereum) {
+        setLoading(true);
+        try {
+          console.log("fetching events");
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const contract = new ethers.Contract(contractAddress, abi, provider.getSigner());
+
+          // console.log("contract", contract, "provider", provider);
+
+          const filter = {
+            address: contractAddress,
+            fromBlock: 0,
+            toBlock: 'latest'
+          };
+
+          console.log("filter", filter);
+
+          const events = await provider.getLogs(filter);
+          console.log("events", events);
+
+          const parsedEvents = events.map(log => {
+            const parsedLog = contract.interface.parseLog(log);
+            return {
+              type: parsedLog.name,
+              ...parsedLog.args,
+              blockNumber: log.blockNumber,
+              transactionHash: log.transactionHash
+            };
+          });
+          console.log("parsedEvents", parsedEvents, "events", events);
+
+          // const userEvents = parsedEvents.filter(event =>
+          //     event?.member && event?.member.toLowerCase() === (await provider.getSigner().getAddress()).toLowerCase()
+          // );
+
+          // const transactionPromises = userEvents.map(async event => {
+          //     const block = await provider.getBlock(event.blockNumber);
+          //     return {
+          //         ...event,
+          //         timestamp: block.timestamp,
+          //         amount: event.amount ? ethers.utils.formatUnits(event.amount, 18) : '0',
+          //         token: event.isNimbus ? 'Nimbus' : 'Collateral',
+          //         status: 'Completed'
+          //     };
+          // });
+
+          // const transactions = await Promise.all(transactionPromises);
+          // @ts-ignore
+          setTransactions(parsedEvents);
+        } catch (error) {
+          console.error("Error fetching events:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchEvents();
+  }, [isConnected, address]);
 
   console.log("stats", statisticsData);
 
@@ -211,7 +297,27 @@ const Dashboard = () => {
             Transaction History
           </div>
           <div className="card w-full my-5 p-2 md:p-5 items-center shadow-xl overflow-x-auto">
-            <table className="w-full text-[10px] md:text-sm text-left text-gray-500 dark:text-gray-400">
+            {!isConnected ? (
+              <div className="card-body">
+
+                <h2 className="card-title">
+                  Connect your wallet to view your transactions
+                </h2>
+              </div>
+            )
+              : (
+                <div className="w-full">
+                  <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                    {/* @ts-ignore */}
+                    <TransactionTable transactions={transactions} />
+                  </div>
+
+                </div>
+              )
+            }
+
+            {/* dummy table */}
+            {/* <table className="w-full text-[10px] md:text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                   <th scope="col" className="px-4 py-3 sm:px-6">
@@ -281,7 +387,8 @@ const Dashboard = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table> */}
+
           </div>
         </div>
       </div>
