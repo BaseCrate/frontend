@@ -1,102 +1,104 @@
 "use client"
-import Image from "next/image";
-import Link from "next/link";
-import Router, { useRouter } from "next/navigation";
 import React, { useState } from "react";
-// import AppLogo from '../assets/app-logo.png'
-import { AiOutlineSearch } from "react-icons/ai";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
-import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import AppLogo from '../../../public/images/logo.png';
+import Image from "next/image";
 
-
-const style = {
-	wrapper: `bg-black w-screen px-[1.2rem] py-[0.8rem] flex `,
-	logoContainer: `flex items-center cursor-pointer`,
-	logoText: ` ml-[0.8rem] text-white font-semibold text-2xl`,
-	searchBar: `flex flex-1 mx-[0.8rem] w-max-[520px] items-center bg-[#363840] rounded-[0.8rem] hover:bg-[#4c505c]`,
-	searchIcon: `text-[#8a939b] mx-3 font-bold text-lg`,
-	searchInput: `h-[2.6rem] w-full border-0 bg-transparent outline-0 ring-0 px-2 pl-0 text-[#e6e8eb] placeholder:text-[#8a939b]`,
-	headerItems: ` flex items-center align-right justify-end`,
-	headerItem: `text-white px-4 font-bold text-[#c8cacd] hover:text-white cursor-pointer`,
-	headerIcon: `text-[#8a939b] text-3xl font-black px-4 hover:text-white cursor-pointer`,
-};
-
-export default function Navbar() {
+const Navbar = () => {
 	const router = useRouter();
 	const [searchQuery, setSearchQuery] = useState("");
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
 	return (
-		<div className={style.wrapper}>
-			<Link href="/">
-				<div className={style.logoContainer}>
-					{/* <Image src={mantleSeaLogo} height={80} width={200} alt="mantle logo" /> */}
-					<div className="text-[32px] text-white font-serif"
-					>
-						BaseCrate
+		<nav className="bg-black text-white py-4">
+			<div className="mx-auto justify-between items-center
+			bg-black w-screen px-4 flex ">
+				<Link href="/">
+					<div className="flex items-center cursor-pointer">
+						<Image src={AppLogo} height={80} width={50} alt="mantle logo" className="px-2 rounded" />
+						<div className="text-[32px] text-white font-serif"
+						>
+							BaseCrate
+						</div>
+						<div className="ml-[0.8rem] text-white font-semibold text-2xl"></div>
 					</div>
-					<div className={style.logoText}></div>
-				</div>
-			</Link>
+				</Link>
 
-			{/* search bar to search streams */}
-			<div className={style.searchBar}>
-				<div className={style.searchIcon}>
-					<AiOutlineSearch />
+				<div className="hidden md:flex items-center space-x-4">
+					<div className="relative flex flex-1 mx-[0.8rem] items-center bg-[#363840] rounded-[0.8rem] hover:bg-[#4c505c] ">
+						<input
+							type="text"
+							placeholder="Track Your Investment"
+							className="bg-[#363840] text-white p-2 rounded-lg w-64"
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+						/>
+						<button
+							onClick={() => router.push(`/searching/${searchQuery}`)}
+							className="absolute right-2 top-1/2 transform -translate-y-1/2"
+						>
+							<AiOutlineSearch className="text-[#8a939b]" />
+						</button>
+					</div>
+
+					<button
+						onClick={() => router.push("/dashboard")}
+						className="flex items-center space-x-1 hover:text-gray-300"
+					>
+						<CgProfile />
+						<span>Dashboard</span>
+					</button>
+
+					<ConnectButton />
 				</div>
-				<input
-					className={style.searchInput}
-					type="text"
-					defaultValue={searchQuery}
-					placeholder="Track Your Investment"
-				//  onKeyPress={(e) => {
-				// if (e.key === 'Enter')
-				//     console.log(searchQuery)
-				// }}
-				/>
-				<button
-					onClick={() => {
-						router.push(`/searching/${searchQuery}`);
-					}}
-					className="text-white px-2"
-				>
-					Search
+
+				<button onClick={toggleMenu} className="md:hidden">
+					<AiOutlineMenu size={24} />
 				</button>
 			</div>
 
-			<div className={style.headerItems}>
-				<Link href="/searching">
-					{/* <div className={style.headerItem}> Streaming </div> */}
-				</Link>
+			{isMenuOpen && (
+				<div className="md:hidden mt-4 space-y-4">
+					<div className="relative">
+						<input
+							type="text"
+							placeholder="Track Your Investment"
+							className="bg-[#363840] text-white p-2 rounded-lg w-full"
+							value={searchQuery}
+							onChange={(e) => setSearchQuery(e.target.value)}
+						/>
+						<button
+							onClick={() => router.push(`/searching/${searchQuery}`)}
+							className="absolute right-2 top-1/2 transform -translate-y-1/2"
+						>
+							<AiOutlineSearch className="text-[#8a939b]" />
+						</button>
+					</div>
 
-				{/* <div
-					className={style.headerItem}
-					onClick={() => {
-						router.push("/explore");
-					}}
-				>
-					Explore
-				</div> */}
+					<button
+						onClick={() => {
+							router.push("/dashboard");
+							setIsMenuOpen(false);
+						}}
+						className="flex items-center space-x-1 hover:text-gray-300 w-full"
+					>
+						<CgProfile />
+						<span>Dashboard</span>
+					</button>
 
-				{/* <div className={style.headerIcon} onClick={() => { router.push(`/profile/${address}`) }}> */}
-				<div
-					className="flex px-4"
-					onClick={() => {
-						router.push("/dashboard");
-					}}
-				>
-
-					<div className="text-[#8a939b] text-3xl px-1 font-black hover:text-white cursor-pointer"><CgProfile /></div>
-					<div className="pt-1 font-bold text-[#c8cacd] hover:text-white cursor-pointer items-center "> Dashboard</div>
-
+					<div className="w-full">
+						<ConnectButton />
+					</div>
 				</div>
-				{/* <div className={style.headerIcon}>
-					<MdOutlineAccountBalanceWallet />
-				</div> */}
-				<div>
-					<ConnectButton />
-				</div>
-			</div>
-		</div>
+			)}
+		</nav>
 	);
-}
+};
+
+export default Navbar;
