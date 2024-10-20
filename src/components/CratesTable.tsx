@@ -66,11 +66,11 @@ const Grid: React.FC = () => {
     });
 
     return (
-        <div>
-            <div className='py-8'>
-                <div className='text-5xl text-center'>Select Your Crate</div>
+        <div className='p-5'>
+            <div className='py-2'>
+                <div className='text-3xl lg:text-5xl text-center'>Select Your Crate</div>
             </div>
-            <div className="flex gap-4 text-center align-middle justify-center pb-4">
+            <div className="flex gap-4 text-center align-middle justify-center items-center pb-4 px-5">
                 {categories.map((category) => (
                     <button
                         key={category}
