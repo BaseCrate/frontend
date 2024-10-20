@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface CrateCardProps {
   crateData: {
-    id: number;
+    id: string;
     name: string;
     category: string;
     containsTokens: string[];
