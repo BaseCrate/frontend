@@ -75,11 +75,11 @@ const Grid: React.FC = () => {
             <div className='py-2'>
                 <div className='text-3xl lg:text-5xl text-center'>Select Your Crate</div>
             </div>
-            <div className="flex gap-4 text-center align-middle justify-center items-center pb-4 px-5">
+            <div className="flex gap-4 text-center align-middle justify-center items-center pb-4 px-5 sm:text-[10px]">
                 {categories.map((category) => (
                     <button
                         key={category}
-                        className={`px-6 py-2 rounded-3xl ${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                        className={`px-3 lg:px-6 py-2 rounded-3xl ${selectedCategory === category ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
                         onClick={() => setSelectedCategory(category)}
                     >
                         {category}
