@@ -109,7 +109,7 @@ const Crate = () => {
             <div className="flex items-center justify-between">
               <h2 className="card-title text-3xl">
                 {" "}
-                {decodeURIComponent(params.name)}
+                {decodeURIComponent(Array.isArray(params.name) ? params.name[0] : params.name)}
               </h2>
               <div className="text-xs bg-blue-500 px-2 py-1 rounded-xl font-bold text-white">
                 {" "}
