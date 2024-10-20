@@ -279,7 +279,7 @@ const Crate = () => {
         </div>
       </div>
 
-      <div className="pt-5">
+      {/* <div className="pt-5">
         <div className="text-xl font-bold"> Transaction History</div>
         <div className="card w-full my-5 p-5 items-center bg-base-200 shadow-xl">
           {!isConnected ? (
@@ -308,12 +308,7 @@ const Crate = () => {
                         Time
                       </th>
 
-                      {/* <th scope="col" className="px-6 py-3">
-                              Action
-                            </th> */}
-                      {/* <th scope="col" className="px-6 py-3">
-                              <span className="sr-only">Delegate</span>
-                            </th> */}
+
                     </tr>
                   </thead>
                   <tbody>
@@ -330,12 +325,7 @@ const Crate = () => {
                           <div className=" "> 10:23:50 13 Oct</div>
                         </div>
                       </td>
-                      {/* <td className="px-6 py-4">
-                                                    5%
-                                                </td> */}
-                      {/* <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delegate</a>
-                                                </td> */}
+
                     </tr>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <th
@@ -350,12 +340,7 @@ const Crate = () => {
                           <div className=" "> 2:23:50 13 Oct</div>
                         </div>
                       </td>
-                      {/* <td className="px-6 py-4">
-                                                    5%
-                                                </td> */}
-                      {/* <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delegate</a>
-                                                </td> */}
+
                     </tr>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <th
@@ -370,12 +355,7 @@ const Crate = () => {
                           <div className=" "> 1:23:50 12 Oct</div>
                         </div>
                       </td>
-                      {/* <td className="px-6 py-4">
-                                                    5%
-                                                </td> */}
-                      {/* <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delegate</a>
-                                                </td> */}
+
                     </tr>
                     <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                       <th
@@ -390,12 +370,7 @@ const Crate = () => {
                           <div className=" "> 3:23:50 11 Oct</div>
                         </div>
                       </td>
-                      {/* <td className="px-6 py-4">
-                                                    5%
-                                                </td> */}
-                      {/* <td className="px-6 py-4 text-right">
-                                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delegate</a>
-                                                </td> */}
+
                     </tr>
                   </tbody>
                 </table>
@@ -403,7 +378,7 @@ const Crate = () => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
