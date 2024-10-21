@@ -77,7 +77,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen pt-10 md:p-4">
+    <div className="min-h-screen py-10 md:p-4">
       <div className="container mx-auto">
         {/* Profile Section */}
         <div className="p-5 sm:p-3 bg-gray-100 rounded-3xl mb-6">
