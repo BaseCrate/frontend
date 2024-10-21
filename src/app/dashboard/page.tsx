@@ -8,8 +8,8 @@ import { config } from '@/lib/contracts';
 
 const Dashboard = () => {
   const { address, isConnected } = useAccount();
-  const [etherBalance, setEtherBalance] = useState(null);
-  const [usdcBalance, setUsdcBalance] = useState(null);
+  const [etherBalance, setEtherBalance] = useState<string | null>(null);
+  const [usdcBalance, setUsdcBalance] = useState<string | null>(null);
 
   useEffect(() => {
     if (isConnected && address) {

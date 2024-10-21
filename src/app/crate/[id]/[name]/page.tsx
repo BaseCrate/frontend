@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useAccount, useWriteContract } from 'wagmi';
 import { ethers } from 'ethers';
 import { Chart } from 'react-google-charts';
@@ -14,20 +14,31 @@ const Crate = () => {
   const { writeContract } = useWriteContract();
   const params = useParams();
 
-  const [provider, setProvider] = useState(null);
-  const [open, setOpen] = useState('deposit');
+
+  const [provider, setProvider] = useState<ethers.providers.Web3Provider | null>(null); const [open, setOpen] = useState('deposit');
   const [amount, setAmount] = useState('0');
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     setOpen(searchParams.get('state') || 'deposit');
-    if (typeof window !== 'undefined' && window.ethereum) {
-      setProvider(new ethers.providers.Web3Provider(window.ethereum));
+    if (typeof window !== "undefined" && window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      setProvider(provider);
     }
   }, []);
 
-  const handleTabOpen = (tabCategory) => setOpen(tabCategory);
+  const priceHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setAmount(e.target.value);
+  };
+
+  const termsHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setTermsAccepted(event.target.checked);
+  };
+
+  const handleTabOpen = (tabCategory: string) => {
+    setOpen(tabCategory);
+  };
 
   const deposit = async () => {
     if (!isConnected || !provider) {
@@ -78,7 +89,7 @@ const Crate = () => {
   };
 
   return (
-    <div className="p-4 md:p-16 max-w-7xl mx-auto">
+    <div className="p-4 md:p-16">
       <ToastContainer />
       <div className="flex flex-col md:flex-row gap-5 min-h-[500px]">
         <div className="card shadow-2xl rounded-xl w-full md:w-[40%]">
@@ -92,36 +103,104 @@ const Crate = () => {
               </div>
             </div>
             <div className="p-2 md:p-5">
-              <div className="card my-3 bg-blue-100 shadow-xl p-3 md:p-8">
-                <div className="flex flex-row w-full items-center gap-2 md:gap-8">
-                  <TabButton
-                    label="Buy"
-                    isActive={open === 'deposit'}
-                    onClick={() => handleTabOpen('deposit')}
-                  />
-                  <TabButton
-                    label="Withdraw"
-                    isActive={open === 'withdraw'}
-                    onClick={() => handleTabOpen('withdraw')}
-                  />
+              <div className="card my-3 bg-blue-100 shadow-xl p-3">
+                <div className="p-2 justify-between items-center">
+                  <div className="flex flex-row w-full items-center gap-2 md:gap-4">
+                    <div
+                      className={`w-1/2 py-2 md:py-4 px-1 md:px-4 text-sm font-semibold md:text-base lg:px-12 hover:underline-offset-8
+                          rounded-2xl text-center transition-all delay-75 text-black focus:ring focus:ring-blue-400 cursor-pointer 
+                          ${open === "deposit" ? "bg-white drop-shadow-2xl text-black font-semibold" : ""}`}
+                    >
+                      <button onClick={() => handleTabOpen("deposit")}>
+                        Buy
+                      </button>
+                    </div>
+                    <div
+                      className={`w-1/2 py-2 md:py-4 px-2 md:px-4 text-sm md:text-base lg:px-12 hover:underline-offset-8
+                          text-center rounded-2xl transition-all delay-75 text-black cursor-pointer 
+                          ${open === "withdraw" ? "bg-white drop-shadow-2xl text-black font-semibold" : ""}`}
+                    >
+                      <button onClick={() => handleTabOpen("withdraw")}>
+                        Withdraw
+                      </button>
+                    </div>
+                  </div>
+                  <div className="divider divider-neutral mt-2"></div>
+
+                  {open === "deposit" && (
+                    <div>
+                      <div className="w-full max-w-lg">
+                        <div className="my-3">
+                          <label className="form-control w-full">
+                            <div className="label">
+                              <div className="my-2">Enter Amount</div>
+                            </div>
+                            <input
+                              type="text"
+                              id="stake-value"
+                              defaultValue={amount}
+                              onChange={priceHandler}
+                              className="input input-lg input-bordered w-full bg-white "
+                              placeholder="0"
+                              required
+                            />
+                          </label>
+                        </div>
+                        <div className="text-sm">
+                          <div className="">
+                            <div className="flex items-center justify-between"></div>
+                          </div>
+                        </div>
+                        <button
+                          onClick={deposit}
+                          className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
+                        >
+                          Invest
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {open === "withdraw" && (
+                    <div>
+                      <div>
+                        <div className="w-full max-w-lg">
+                          <div className="my-4">
+                            <label className="form-control w-full">
+                              <div className="label">
+                                <div className="font-bold pt-2 md:pt-5">
+                                  Crate Withdraw available
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div className="my-6"></div>
+                          <div className="flex items-center mb-6">
+                            <input
+                              type="checkbox"
+                              id="terms"
+                              checked={termsAccepted}
+                              onChange={termsHandler}
+                              className="mr-2"
+                            />
+                            <label
+                              htmlFor="terms"
+                              className="text-sm lg:text-lg font-semibold text-black dark:text-white"
+                            >
+                              I want to withdraw my Crates position
+                            </label>
+                          </div>
+                          <button
+                            onClick={withdraw}
+                            className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
+                          >
+                            Withdraw
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="divider divider-neutral mt-2"></div>
-
-                {open === 'deposit' && (
-                  <DepositForm
-                    amount={amount}
-                    setAmount={setAmount}
-                    onDeposit={deposit}
-                  />
-                )}
-
-                {open === 'withdraw' && (
-                  <WithdrawForm
-                    termsAccepted={termsAccepted}
-                    setTermsAccepted={setTermsAccepted}
-                    onWithdraw={withdraw}
-                  />
-                )}
               </div>
             </div>
           </div>
@@ -141,70 +220,71 @@ const Crate = () => {
   );
 };
 
-const TabButton = ({ label, isActive, onClick }) => (
-  <button
-    onClick={onClick}
-    className={`w-1/2 py-2 md:py-4 px-2 md:px-4 text-sm md:text-base rounded-2xl text-center transition-all delay-75 text-black focus:ring focus:ring-blue-400 cursor-pointer 
-      ${isActive ? 'bg-white drop-shadow-2xl font-semibold' : 'hover:bg-white/50'}`}
-  >
-    {label}
-  </button>
-);
 
-const DepositForm = ({ amount, setAmount, onDeposit }) => (
-  <div className="w-full">
-    <div className="my-3">
-      <label className="form-control w-full">
-        <div className="label">
-          <div className="my-2">Enter Amount</div>
-        </div>
-        <input
-          type="text"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="input input-lg input-bordered bg-white"
-          placeholder="0"
-          required
-        />
-      </label>
-    </div>
-    <button
-      onClick={onDeposit}
-      className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
-    >
-      Invest
-    </button>
-  </div>
-);
+// const TabButton = ({ label, isActive, onClick }) => (
+//   <button
+//     onClick={onClick}
+//     className={`w-1/2 py-2 md:py-4 px-2 md:px-4 text-sm md:text-base rounded-2xl text-center transition-all delay-75 text-black focus:ring focus:ring-blue-400 cursor-pointer 
+//       ${isActive ? 'bg-white drop-shadow-2xl font-semibold' : 'hover:bg-white/50'}`}
+//   >
+//     {label}
+//   </button>
+// );
 
-const WithdrawForm = ({ termsAccepted, setTermsAccepted, onWithdraw }) => (
-  <div className="w-full">
-    <div className="my-4">
-      <div className="font-bold pt-2 md:pt-5">Crate Withdraw available</div>
-    </div>
-    <div className="flex items-center mb-6">
-      <input
-        type="checkbox"
-        id="terms"
-        checked={termsAccepted}
-        onChange={(e) => setTermsAccepted(e.target.checked)}
-        className="mr-2"
-      />
-      <label
-        htmlFor="terms"
-        className="text-sm md:text-lg font-semibold text-black dark:text-white"
-      >
-        I want to withdraw my Crates position
-      </label>
-    </div>
-    <button
-      onClick={onWithdraw}
-      className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
-    >
-      Withdraw
-    </button>
-  </div>
-);
+// const DepositForm = ({ amount, setAmount, onDeposit }) => (
+//   <div className="w-full">
+//     <div className="my-3">
+//       <label className="form-control w-full">
+//         <div className="label">
+//           <div className="my-2">Enter Amount</div>
+//         </div>
+//         <input
+//           type="text"
+//           value={amount}
+//           onChange={(e) => setAmount(e.target.value)}
+//           className="input input-lg input-bordered bg-white"
+//           placeholder="0"
+//           required
+//         />
+//       </label>
+//     </div>
+//     <button
+//       onClick={onDeposit}
+//       className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
+//     >
+//       Invest
+//     </button>
+//   </div>
+// );
+
+// const WithdrawForm = ({ termsAccepted, setTermsAccepted, onWithdraw }) => (
+//   <div className="w-full">
+//     <div className="my-4">
+//       <div className="font-bold pt-2 md:pt-5">Crate Withdraw available</div>
+//     </div>
+//     <div className="flex items-center mb-6">
+//       <input
+//         type="checkbox"
+//         id="terms"
+//         checked={termsAccepted}
+//         onChange={(e) => setTermsAccepted(e.target.checked)}
+//         className="mr-2"
+//       />
+//       <label
+//         htmlFor="terms"
+//         className="text-sm md:text-lg font-semibold text-black dark:text-white"
+//       >
+//         I want to withdraw my Crates position
+//       </label>
+//     </div>
+//     <button
+//       onClick={onWithdraw}
+//       className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4 dark:text-black border-blue-700 rounded-3xl w-full md:w-auto"
+//     >
+//       Withdraw
+//     </button>
+//   </div>
+// );
 
 export default Crate;
 
