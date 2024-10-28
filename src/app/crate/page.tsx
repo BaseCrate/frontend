@@ -192,7 +192,7 @@ const Crate = () => {
 
                                                 <button
                                                     type="submit"
-                                                    className="bg-yellow-400 dark:bg-slate-900 text-black font-bold py-2 px-4  dark:text-black border-blue-700 rounded-3xl "
+                                                    className="bg-yellow-400 text-black font-bold py-2 px-4  border-blue-700 rounded-3xl "
                                                 >
                                                     Invest
                                                 </button>

@@ -1,10 +1,13 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiOutlineSearch, AiOutlineMenu } from "react-icons/ai";
 import { CgProfile } from "react-icons/cg";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import AppLogo from '../../../public/images/logo.png';
+import Image from "next/image";
+
 
 const Navbar = () => {
 	const router = useRouter();
@@ -16,6 +19,16 @@ const Navbar = () => {
 	return (
 		<nav className="bg-black text-white p-4">
 			<div className="container mx-auto flex justify-between items-center">
+				<Link href="/">
+					<div className="flex items-center cursor-pointer">
+						<Image src={AppLogo} height={80} width={50} alt="mantle logo" className="px-2 rounded" />
+						<div className="text-[32px] text-white font-serif"
+						>
+							BaseCrate
+						</div>
+						<div className="ml-[0.8rem] text-white font-semibold text-2xl"></div>
+					</div>
+				</Link>
 				<Link href="/" className="text-2xl font-serif">
 					BaseCrate
 				</Link>
